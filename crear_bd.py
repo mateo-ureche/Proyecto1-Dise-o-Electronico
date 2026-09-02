@@ -1,7 +1,6 @@
 import sqlite3
 
 conexion = sqlite3.connect("ubicaciones.db")
-
 cursor = conexion.cursor()
 
 cursor.execute("""
@@ -16,7 +15,4 @@ CREATE TABLE IF NOT EXISTS ubicaciones (
 
 conexion.commit()
 conexion.close()
-
-print("Base de datos creada correctamente.")
-
 
