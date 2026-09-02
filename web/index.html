@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GPS Tracker</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contenedor {
+            width: 90%;
+            max-width: 700px;
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+        }
+
+        .encabezado {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .encabezado h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .encabezado p {
+            margin-top: 8px;
+            color: #64748b;
+        }
+
+        .datos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .campo {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .etiqueta {
+            display: block;
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .valor {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .estado {
+            text-align: center;
+            margin-top: 25px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .punto {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        @media (max-width: 600px) {
+
+            .datos {
+                grid-template-columns: 1fr;
+            }
+
+            .contenedor {
+                padding: 25px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <div class="encabezado">
+            <h1>📍 GPS Tracker</h1>
+            <p>Última ubicación recibida</p>
+        </div>
+
+        <div class="datos">
+
+            <div class="campo">
+                <span class="etiqueta">LATITUD</span>
+                <span class="valor" id="latitud">---</span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">LONGITUD</span>
+                <span class="valor" id="longitud">---</span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">FECHA</span>
+                <span class="valor" id="fecha">---</span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">HORA</span>
+                <span class="valor" id="hora">---</span>
+            </div>
+
+        </div>
+
+        <div class="estado">
+            <span class="punto"></span>
+            Actualización automática cada 10 segundos
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function actualizarUbicacion() {
+
+            fetch("/api/ubicacion")
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+
+                    document.getElementById("latitud").textContent =
+                        datos.latitud;
+
+                    document.getElementById("longitud").textContent =
+                        datos.longitud;
+
+                    document.getElementById("fecha").textContent =
+                        datos.fecha;
+
+                    document.getElementById("hora").textContent =
+                        datos.hora;
+
+                })
+                .catch(error => {
+
+                    console.error("Error:", error);
+
+                });
+
+        }
+
+
+        // Cargar la ubicación al abrir la página
+        actualizarUbicacion();
+
+
+        // Actualizar automáticamente cada 10 segundos
+        setInterval(actualizarUbicacion, 10000);
+
+    </script>
+
+</body>
+
+</html>
